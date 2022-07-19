@@ -7,13 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hibernate.entitiy.Category;
+import com.hibernate.entitiy.Product;
 import com.hibernate.exception.ResourceNotFoundException;
 import com.hibernate.payload.CategoryDto;
 import com.hibernate.repository.CategoryRepository;
+import com.hibernate.repository.ProductRepository;
 import com.hibernate.services.CategoryService;
 
 @Service
 public class CategoryServicecImpl implements CategoryService {
+	
+	
+	@Autowired
+	private ProductRepository  productRepository1;
 
 	
 	@Autowired
@@ -58,6 +64,10 @@ public class CategoryServicecImpl implements CategoryService {
 	public List<CategoryDto> getAllCategory() {
 
 
+		List<Product> list1 = productRepository1.findAll();
+		System.out.println("\n\n\n" + list1);
+		
+		
 		List<Category> list = this.categoryRepository.findAll();
 		List<CategoryDto> listDto = list.stream().map(c -> this.toDto(c)).collect(Collectors.toList());
 		return listDto;

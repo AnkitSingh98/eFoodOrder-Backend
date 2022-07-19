@@ -22,14 +22,13 @@ import com.hibernate.payload.UserDto;
 import com.hibernate.services.UserService;
 
 @RestController
-@RequestMapping("/user")
 public class UserController {
 	
 	@Autowired
 	UserService userService;
 	
 	//Create User
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public ResponseEntity<UserDto> create(@Valid @RequestBody UserDto userDto) {
 		
 		System.out.println("here");
@@ -39,7 +38,7 @@ public class UserController {
 	
 	
 	//Update User
-	@PutMapping("/{userId}")
+	@PutMapping("/user/{userId}")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto toUpdate,@PathVariable int userId) {
 		
 		UserDto updatedUser = userService.update(toUpdate, userId);
@@ -48,7 +47,7 @@ public class UserController {
 	}
 	
 	//Delete User
-	@DeleteMapping("/{userId}")
+	@DeleteMapping("/user/{userId}")
 	public ResponseEntity<String> deleteUser(@PathVariable int userId) {
 		
 		userService.delete(userId);
@@ -59,7 +58,7 @@ public class UserController {
 	
 	
 	//Get All
-	@GetMapping("/")
+	@GetMapping("/user")
 	public ResponseEntity<List<UserDto>> getAll(){
 	
 		List<UserDto> allUsers = userService.getAll();
@@ -68,7 +67,7 @@ public class UserController {
 	
 	
 	//GetById
-	@GetMapping("/{userId}")
+	@GetMapping("/user/{userId}")
 	public ResponseEntity<UserDto> getByUserId(@PathVariable int userId) {
 		
 		UserDto u = userService.getByUserId(userId);
@@ -76,18 +75,13 @@ public class UserController {
 	}
 	
 	//GetByEmail
-	@GetMapping("/email/{email}")
+	@GetMapping("/user/email/{email}")
 	public ResponseEntity<UserDto> getByEmail(@PathVariable String email) {
 		
 		UserDto u = userService.getByEmail(email);
 		return new ResponseEntity<UserDto>(u,HttpStatus.OK);
 		
 	}
-	
-	
-	
-	
-	
 	
 	
 

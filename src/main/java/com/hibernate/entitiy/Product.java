@@ -1,6 +1,8 @@
 package com.hibernate.entitiy;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -8,6 +10,7 @@ import javax.persistence.ManyToOne;
 public class Product {
 	
 	@Id
+	@GeneratedValue( strategy= GenerationType.IDENTITY)
 	private int productId;
 	
 	private String productName;
@@ -42,6 +45,7 @@ public class Product {
 		this.live = live;
 		this.stock = stock;
 		this.imageName = imageName;
+		
 		this.category = category;
 	}
 
@@ -55,6 +59,8 @@ public class Product {
 	
 
 	public int getProductId() {
+		
+		
 		return productId;
 	}
 
@@ -67,12 +73,14 @@ public class Product {
 
 
 	public String getProductName() {
+		
 		return productName;
 	}
 
 
 
 	public void setProductName(String productName) {
+		
 		this.productName = productName;
 	}
 

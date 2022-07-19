@@ -14,24 +14,24 @@ import javax.persistence.OneToMany;
 public class Category {
 	
 	@Id
-	@GeneratedValue( strategy = GenerationType.AUTO)
+	@GeneratedValue( strategy = GenerationType.IDENTITY)
 	public int categoryId;
 	
 	public String title;
 	
-	@OneToMany(mappedBy = "category")
-	private Set<Product> products = new HashSet<>();
+	//@OneToMany(mappedBy = "category")
+	//private Set<Product> products = new HashSet<>();
 	
 	
 	
 
-	public Set<Product> getProducts() {
-		return products;
-	}
-
-	public void setProducts(Set<Product> products) {
-		this.products = products;
-	}
+//	public Set<Product> getProducts() {
+//		return products;
+//	}
+//
+//	public void setProducts(Set<Product> products) {
+//		this.products = products;
+//	}
 
 	public Category() {
 		super();

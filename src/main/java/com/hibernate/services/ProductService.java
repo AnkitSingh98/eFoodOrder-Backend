@@ -16,7 +16,7 @@ import com.hibernate.repository.ProductRepository;
 
 public interface ProductService {
 	
-	public ProductDto createProduct(ProductDto t);
+	public ProductDto createProduct(ProductDto t, int categoryId);
 	
 	public ProductDto updateProduct(ProductDto t, int pid);
 	
@@ -27,6 +27,8 @@ public interface ProductService {
 	public ProductDto getProduct(int pid);
 	
 	public List<ProductDto> getAllProducts();
+	
+	public List<ProductDto> getProductsByCategory(int categoryId);
 	
 	
 	

@@ -18,7 +18,6 @@ import com.hibernate.payload.CategoryDto;
 import com.hibernate.services.CategoryService;
 
 @RestController
-@RequestMapping("/category")
 public class CategoryController {
 	
 	@Autowired
@@ -26,7 +25,7 @@ public class CategoryController {
 	
 	
 	//Create Category
-	@PostMapping("/")
+	@PostMapping("/category")
 	public ResponseEntity<CategoryDto> createCategory( @RequestBody CategoryDto t) {
 		
 		 CategoryDto createdCatDto = this.categoryService.createCategory(t);
@@ -36,7 +35,7 @@ public class CategoryController {
 	
 	
 	//UpdateCategory
-	@PutMapping("/{cid}")
+	@PutMapping("/category/{cid}")
 	public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto t, @PathVariable int cid) {
 		
 		CategoryDto updatedCatDto = this.categoryService.updateCategory(t, cid);
@@ -45,7 +44,7 @@ public class CategoryController {
 	
 	
 	//Delete Category by Id
-	@DeleteMapping("/{cid}")
+	@DeleteMapping("/category/{cid}")
 	public ResponseEntity<String> deleteCategory(@PathVariable int cid) {
 		
 		this.categoryService.deleteCategory(cid);
@@ -54,7 +53,7 @@ public class CategoryController {
 	
 	
 	//Get category by Id
-	@GetMapping("/{cid}")
+	@GetMapping("/category/{cid}")
 	public ResponseEntity<CategoryDto> getCategoryById(@PathVariable int cid) {
 		
 		CategoryDto dto = this.categoryService.getCategory(cid);
@@ -65,7 +64,7 @@ public class CategoryController {
 	
 	
 	//Get all Category
-	@GetMapping("/")
+	@GetMapping("/category")
 	public ResponseEntity<List<CategoryDto>> getAllCategory(){
 		
 		List<CategoryDto> list = this.categoryService.getAllCategory();

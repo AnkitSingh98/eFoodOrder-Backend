@@ -6,9 +6,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hibernate.entitiy.Category;
 import com.hibernate.entitiy.Product;
 import com.hibernate.exception.ResourceNotFoundException;
 import com.hibernate.payload.ProductDto;
+import com.hibernate.repository.CategoryRepository;
 import com.hibernate.repository.ProductRepository;
 import com.hibernate.services.ProductService;
 
@@ -18,15 +20,28 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductRepository  productRepository;
 	 
-	 
+	@Autowired
+	private CategoryRepository catRepo;
 	
 	// Create Product ********
 	@Override
-	public ProductDto createProduct(ProductDto t) {
+	public ProductDto createProduct(ProductDto t, int categoryId) {
 		
+		System.out.println("Inside ServiceImpl");
+		
+		 Category cat = this.catRepo.findById(categoryId).orElseThrow( ()-> new ResourceNotFoundException());
+		 System.out.println(cat);
 		 Product p = this.toEntity(t);
-		 Product createdProduct = this.productRepository.save(p);
 		 
+		// System.out.println("Product = " + p);
+		 p.setCategory(cat);
+		 
+		// System.out.println("Product after set category = " + p);
+		 
+		 Product createdProduct = this.productRepository.save(p);
+		// System.out.println(" Product saved in db = " + createdProduct);
+		 
+		// System.out.println("Inside ServiceImpl Product created");
 		 return this.toDto(createdProduct);
 		 
 	}
@@ -41,6 +56,9 @@ public class ProductServiceImpl implements ProductService {
 		p.setProductName(t.getProductName());
 		p.setProductDesc(t.getProductDesc());
 		p.setProductPrice(t.getProductPrice());
+		p.setProductQuantity(t.getProductQuantity());
+		p.setLive(t.isLive());
+		p.setImageName(t.getImageName());
 		p.setStock(t.isStock());
 		
 		Product updatedProduct = this.productRepository.save(p);
@@ -85,6 +103,21 @@ public class ProductServiceImpl implements ProductService {
 		
 		
 		List<Product> list = productRepository.findAll();
+		
+		List<ProductDto> listDto = list.stream().map(p->this.toDto(p)).collect(Collectors.toList());
+		
+		return listDto;
+		
+	}
+	
+	
+	
+	// Get Product By Category
+	public List<ProductDto> getProductsByCategory(int categoryId){
+		
+		Category cat = this.catRepo.findById(categoryId).orElseThrow( ()-> new ResourceNotFoundException());
+		List<Product> list = this.productRepository.findByCategory(cat);
+		
 		List<ProductDto> listDto = list.stream().map(p->this.toDto(p)).collect(Collectors.toList());
 		
 		return listDto;
@@ -100,7 +133,11 @@ public class ProductServiceImpl implements ProductService {
 		t.setProductName(p.getProductName());
 		t.setProductDesc(p.getProductDesc());
 		t.setProductPrice(p.getProductPrice());
+		t.setProductQuantity(p.getProductQuantity());
+		t.setLive(p.isLive());
+		t.setImageName(p.getImageName());
 		t.setStock(p.isStock());
+		t.setCategory(p.getCategory());
 		
 		return t;
 	}
@@ -112,7 +149,11 @@ public class ProductServiceImpl implements ProductService {
 		p.setProductName(t.getProductName());
 		p.setProductDesc(t.getProductDesc());
 		p.setProductPrice(t.getProductPrice());
+		p.setProductQuantity(t.getProductQuantity());
+		p.setLive(t.isLive());
+		p.setImageName(t.getImageName());
 		p.setStock(t.isStock());
+		//p.setCategory(t.getCategory());
 		
 		return p;
 	}

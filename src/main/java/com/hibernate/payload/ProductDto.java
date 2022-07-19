@@ -2,6 +2,8 @@ package com.hibernate.payload;
 
 import javax.persistence.Id;
 
+import com.hibernate.entitiy.Category;
+
 public class ProductDto {
 	
 	@Id
@@ -9,13 +11,44 @@ public class ProductDto {
 	private String productName;
 	private String productDesc;
 	private double productPrice;
+	
+	private int productQuantity;
+	
+	private boolean live;
+	
 	private boolean stock;
-	//private boolean isLive;
-	//private String imageName;
+	
+	private String imageName;
+	
+	private Category category;
 	
 	
 	
 	
+	public int getProductQuantity() {
+		return productQuantity;
+	}
+	public void setProductQuantity(int productQuantity) {
+		this.productQuantity = productQuantity;
+	}
+	public boolean isLive() {
+		return live;
+	}
+	public void setLive(boolean live) {
+		this.live = live;
+	}
+	public String getImageName() {
+		return imageName;
+	}
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+	public Category getCategory() {
+		return category;
+	}
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 	public int getProductId() {
 		return productId;
 	}
