@@ -1,6 +1,7 @@
 package com.hibernate.services.Impl;
 
 import java.util.List;
+
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +117,7 @@ public class ProductServiceImpl implements ProductService {
 	public List<ProductDto> getProductsByCategory(int categoryId){
 		
 		Category cat = this.catRepo.findById(categoryId).orElseThrow( ()-> new ResourceNotFoundException());
-		List<Product> list = this.productRepository.findByCategory(cat);
+		List<Product> list = this.productRepository.findByCategory(cat).orElseThrow( ()-> new ResourceNotFoundException());
 		
 		List<ProductDto> listDto = list.stream().map(p->this.toDto(p)).collect(Collectors.toList());
 		
@@ -141,6 +142,7 @@ public class ProductServiceImpl implements ProductService {
 		
 		return t;
 	}
+	
 	
 	public Product toEntity(ProductDto t) {
 		

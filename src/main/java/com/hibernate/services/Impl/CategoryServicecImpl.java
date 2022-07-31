@@ -19,10 +19,6 @@ public class CategoryServicecImpl implements CategoryService {
 	
 	
 	@Autowired
-	private ProductRepository  productRepository1;
-
-	
-	@Autowired
 	CategoryRepository categoryRepository;
 	
 	
@@ -62,10 +58,6 @@ public class CategoryServicecImpl implements CategoryService {
 
 	@Override
 	public List<CategoryDto> getAllCategory() {
-
-
-		List<Product> list1 = productRepository1.findAll();
-		System.out.println("\n\n\n" + list1);
 		
 		
 		List<Category> list = this.categoryRepository.findAll();

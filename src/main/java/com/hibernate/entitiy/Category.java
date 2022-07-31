@@ -3,7 +3,9 @@ package com.hibernate.entitiy;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,8 +21,8 @@ public class Category {
 	
 	public String title;
 	
-	//@OneToMany(mappedBy = "category")
-	//private Set<Product> products = new HashSet<>();
+	@OneToMany(mappedBy = "category",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	private Set<Product> products = new HashSet<>();
 	
 	
 	

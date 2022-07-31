@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,11 +28,15 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	//Create User
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public ResponseEntity<UserDto> create(@Valid @RequestBody UserDto userDto) {
 		
-		System.out.println("here");
+		userDto.setPassword(this.passwordEncoder.encode(userDto.getPassword()));
+		
 		UserDto createdUser = userService.create(userDto);
 		return new ResponseEntity<UserDto>(createdUser,HttpStatus.CREATED);
 	}

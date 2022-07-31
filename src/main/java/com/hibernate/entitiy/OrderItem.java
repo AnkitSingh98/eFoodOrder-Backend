@@ -54,7 +54,7 @@ public class OrderItem {
 	}
 
 	public void setTotalProductPrice(double totalProductPrice) {
-		this.totalProductPrice = this.product.getProductPrice() * this.quantity;
+		this.totalProductPrice = totalProductPrice;
 	}
 
 	public Order getOrder() {

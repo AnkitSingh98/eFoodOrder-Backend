@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class CartItem {
 	
@@ -21,17 +23,39 @@ public class CartItem {
 	
 	private double totalProductPrice;
 	
+	@JsonIgnore
 	@ManyToOne
 	private Cart cart;
 	
 	
 	// -------------------------------------------------------
 
+	
+	
+	
 	public int getCartItem() {
 		return cartItemId;
 	}
 
-	public void setCardItem(int cardItemId) {
+	public int getCartItemId() {
+		return cartItemId;
+	}
+
+	public void setCartItemId(int cartItemId) {
+		this.cartItemId = cartItemId;
+	}
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+
+	
+
+	public void setCartItem(int cardItemId) {
 		this.cartItemId = cartItemId;
 	}
 
@@ -55,7 +79,7 @@ public class CartItem {
 		return totalProductPrice;
 	}
 
-	public void setTotalProductPrice(double totalProductPrice) {
+	public void setTotalProductPrice() {
 		this.totalProductPrice = this.product.getProductPrice() * this.quantity;
 	}
 	

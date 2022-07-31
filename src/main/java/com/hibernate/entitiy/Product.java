@@ -1,6 +1,7 @@
 package com.hibernate.entitiy;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,11 +24,11 @@ public class Product {
 	
 	private boolean live;
 	
-	private boolean stock;
+	private boolean stock=true;
 	
 	private String imageName;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Category category;
 	
 	

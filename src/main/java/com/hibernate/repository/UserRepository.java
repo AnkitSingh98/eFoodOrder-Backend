@@ -1,6 +1,7 @@
 package com.hibernate.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,24 +13,24 @@ public interface UserRepository extends JpaRepository<User, Integer>{
 	
 	
 	//CustomFinderMethods  -- just write in Standard format ie camel case,...  -- jpa will create query automatically
+	//email == username for our project
+	public Optional<User> findByEmail(String email);  
 	
-	public User findByEmail(String email);  
+	public  Optional<List<User>> findByName(String name);
 	
-	public  List<User> findByName(String name);
+	public Optional<User> findByEmailAndPassword(String email, String password);
 	
-	public User findByEmailAndPassword(String email, String password);
+	public Optional<List<User>> findByActiveTrue();
 	
-	public List<User> findByActiveTrue();
+	public Optional<List<User>> findByAboutIsNull();
 	
-	public List<User> findByAboutIsNull();
+	public Optional<List<User>> findByNameStartingWith(String prefix);
 	
-	public List<User> findByNameStartingWith(String prefix);
+	public Optional<List<User>> findByNameContaining(String infix);
 	
-	public List<User> findByNameContaining(String infix);
+	public Optional<List<User>> findByNameLike(String likePattern);
 	
-	public List<User> findByNameLike(String likePattern);
-	
-	public List<User> findByNameOrderByNameDesc(String name);
+	public Optional<List<User>> findByNameOrderByNameDesc(String name);
 	
 	
 	// Creating Query Methods

@@ -3,11 +3,13 @@ package com.hibernate.services.Impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hibernate.entitiy.User;
 import com.hibernate.exception.ResourceNotFoundException;
+import com.hibernate.payload.CartDto;
 import com.hibernate.payload.UserDto;
 import com.hibernate.repository.UserRepository;
 import com.hibernate.services.UserService;
@@ -17,6 +19,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	ModelMapper mapper;
 
 	//Create User
 	@Override
@@ -77,9 +82,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto getByEmail(String email) {
 		
-		User u = this.userRepository.findByEmail(email);
+		User u = this.userRepository.findByEmail(email).orElseThrow( ()-> new ResourceNotFoundException());
 		
-		return this.toDto(u);
+		return this.mapper.map(u, UserDto.class);
 	}
 	
 	
