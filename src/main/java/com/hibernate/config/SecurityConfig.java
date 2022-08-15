@@ -41,7 +41,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	private JwtAuthenticationEntryPoint entryPoint;
 	
 	
-	public static String[] PUBLIC_URLS = { "/user" , "/auth/login" };
+	public static String[] PUBLIC_URLS = { "/user" , 
+											"/auth/login" ,
+											"/v3/api-docs",
+											"/v2/api-docs",
+											"/swagger-resources/**",
+											"/swagger-ui/**",
+											"/webjars/**"
+			};
+	
+	
 	
 	// Configuring Basic Authorization
 	@Override
