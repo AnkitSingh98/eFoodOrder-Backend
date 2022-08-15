@@ -60,8 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.csrf()
 		.disable()
 		.authorizeRequests()
-		//.antMatchers(HttpMethod.POST).permitAll()
+	//  .antMatchers(HttpMethod.POST).permitAll()
 		.antMatchers(PUBLIC_URLS).permitAll()
+        .antMatchers(HttpMethod.GET).permitAll()   // Anyone can access GET methods ie without authentication
+//      .antMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")   
 		.anyRequest()
 		.authenticated()
 		.and()
