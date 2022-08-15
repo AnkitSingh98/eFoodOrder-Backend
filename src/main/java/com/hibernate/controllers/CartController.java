@@ -1,5 +1,7 @@
 package com.hibernate.controllers;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,16 +23,16 @@ public class CartController {
 	private CartService cartService;
 	
 	
-	String userName = "ank99@gmail.com";
+	//String userName = "ank99@gmail.com";
 	
 	@PostMapping("/")
-	public CartDto addItemToCart(@RequestBody ItemRequest item) {
+	public CartDto addItemToCart(@RequestBody ItemRequest item, Principal principal) {
 		
 		System.out.println("Inside controller");
 		
 		
 		
-		CartDto t = this.cartService.addItem(item, userName);
+		CartDto t = this.cartService.addItem(item, principal.getName());
 		return t;
 		
 	}
@@ -38,13 +40,13 @@ public class CartController {
 	
 	
 	@GetMapping("/")
-	public CartDto getByUsername()  {  
+	public CartDto getByUsername(Principal principal)  {  
 		
 		System.out.println("Inside controller");
 		
 		
 		
-		CartDto t = this.cartService.get(userName);
+		CartDto t = this.cartService.get(principal.getName());
 		
 		System.out.println("CartId= "+t.getCartId()+" \n User= "+ t.getUser() +" \nItems=" + t.getItems());
 		
@@ -55,8 +57,8 @@ public class CartController {
 	
 	
 	@PutMapping("/{productId}")
-	public CartDto removeProductFromcart(@PathVariable int productId) {
-		CartDto cartDto = this.cartService.removeItem(userName, productId);
+	public CartDto removeProductFromcart(@PathVariable int productId, Principal principal) {
+		CartDto cartDto = this.cartService.removeItem(principal.getName(), productId);
 		return cartDto;
 	}
 

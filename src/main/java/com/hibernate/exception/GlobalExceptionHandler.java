@@ -35,5 +35,13 @@ public class GlobalExceptionHandler {
 		
 		return new ResponseEntity<Map<String,String>>(map, HttpStatus.BAD_REQUEST);
 	}
+	
+	
+	
+	@ExceptionHandler(BadUserLoginDetailsException.class)
+	public ResponseEntity<String> handleBadUserLoginDetailsException(BadUserLoginDetailsException ex) {
+		
+		return new ResponseEntity<String>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+	}
 
 }

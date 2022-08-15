@@ -7,10 +7,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hibernate.entitiy.Role;
 import com.hibernate.entitiy.User;
 import com.hibernate.exception.ResourceNotFoundException;
 import com.hibernate.payload.CartDto;
 import com.hibernate.payload.UserDto;
+import com.hibernate.repository.RoleRepository;
 import com.hibernate.repository.UserRepository;
 import com.hibernate.services.UserService;
 
@@ -18,7 +20,10 @@ import com.hibernate.services.UserService;
 public class UserServiceImpl implements UserService {
 	
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
+	
+	@Autowired
+	private RoleRepository roleRepository;
 	
 	@Autowired
 	ModelMapper mapper;
@@ -27,8 +32,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto create(UserDto userDto) {
 		User user = this.toEntity(userDto);
-		User createdUser = this.userRepository.save(user);
 		
+		
+		Role role = this.roleRepository.findById(102).get();
+		user.getRoles().add(role);
+		
+		User createdUser = this.userRepository.save(user);
 		return this.toDto(createdUser);
 		
 	}
@@ -91,38 +100,15 @@ public class UserServiceImpl implements UserService {
 	//Convert User to UserDto
 	public UserDto toDto(User user) {
 		
-		UserDto dto = new UserDto();
-		dto.setUserId(user.getUserId());
-		dto.setName(user.getName());
-		dto.setEmail(user.getEmail());
-		dto.setPassword(user.getPassword());
-		dto.setAbout(user.getAbout());
-		dto.setAddress(user.getAddress());
-		dto.setActive(user.isActive());
-		dto.setGender(user.getGender());
-		dto.setCreateAt(user.getCreateAt());
-		dto.setPhone(user.getPhone());
-		
-		return dto;
+	
+		return this.mapper.map(user, UserDto.class);
 		
 	}
 	
 	//Convert UserDto to User Entity
 	public User toEntity(UserDto t) {
-		
-		User u = new User();
-		u.setUserId(t.getUserId());
-		u.setName(t.getName());
-		u.setEmail(t.getEmail());
-		u.setPassword(t.getPassword());
-		u.setAbout(t.getAbout());
-		u.setAddress(t.getAddress());
-		u.setActive(t.isActive());
-		u.setGender(t.getGender());
-		u.setCreateAt(t.getCreateAt());
-		u.setPhone(t.getPhone());
-		
-		return u;
+	
+		return this.mapper.map(t, User.class);
 		
 	}
 

@@ -1,5 +1,8 @@
 package com.hibernate.payload;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,6 +10,9 @@ import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hibernate.entitiy.Role;
 
 public class UserDto {
 	
@@ -38,6 +44,18 @@ public class UserDto {
 	private String phone;
 	
 	private boolean active;
+	
+	private Set<RoleDto> roles = new HashSet<>();
+	
+	
+
+	public Set<RoleDto> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<RoleDto> roles) {
+		this.roles = roles;
+	}
 
 	public int getUserId() {
 		return userId;
@@ -63,6 +81,8 @@ public class UserDto {
 		this.email = email;
 	}
 
+	
+	//@JsonIgnore
 	public String getPassword() {
 		return password;
 	}

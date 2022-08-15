@@ -6,6 +6,7 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ public class ProductController {
 	
 	
 	//  Create Product Handler
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value="/category/{categoryId}/product",method=RequestMethod.POST)
 	public ProductDto createProduct(@RequestBody ProductDto t, @PathVariable int categoryId) {
 		
@@ -38,6 +40,7 @@ public class ProductController {
 	
 	
 	// Update Product Handler
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value="/products/{pid}",method= RequestMethod.PUT)
 	public ProductDto updateProduct(@RequestBody ProductDto t,@PathVariable int pid) {
 		
@@ -49,6 +52,7 @@ public class ProductController {
 	
 	
 	// Delete by ID Product Handler
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value="/products/{pid}",method=RequestMethod.DELETE)
 	public void deleteProduct(@PathVariable int pid) {
 		

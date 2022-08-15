@@ -1,9 +1,13 @@
 package com.hibernate.controllers;
 
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hibernate.entitiy.Role;
+import com.hibernate.payload.RoleDto;
 import com.hibernate.payload.UserDto;
 import com.hibernate.services.UserService;
 
@@ -31,13 +37,18 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	@Autowired
+	ModelMapper mapper;
+	
 	//Create User
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public ResponseEntity<UserDto> create(@Valid @RequestBody UserDto userDto) {
 		
-		userDto.setPassword(this.passwordEncoder.encode(userDto.getPassword()));
+		userDto.setCreateAt(new Date().toString());
+		userDto.setActive(true);
 		
-		UserDto createdUser = userService.create(userDto);
+		userDto.setPassword(this.passwordEncoder.encode(userDto.getPassword()));
+		UserDto createdUser = this.userService.create(userDto);
 		return new ResponseEntity<UserDto>(createdUser,HttpStatus.CREATED);
 	}
 	

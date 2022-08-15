@@ -1,10 +1,12 @@
 package com.hibernate.controllers;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,15 +26,15 @@ import com.hibernate.services.OrdersService;
 @RequestMapping("/orders")
 public class OrderController {
 	
-	String userName = "ank99@gmail.com";
+	// String userName = "ank99@gmail.com";
 
 	@Autowired
 	private OrdersService orderService;
 
 	@PostMapping("/")
-	public ResponseEntity<OrdersDto> createOrder(@RequestBody OrderRequest request) {
+	public ResponseEntity<OrdersDto> createOrder(@RequestBody OrderRequest request, Principal principal) {
 
-		OrdersDto createOrder = this.orderService.createOrder(request, userName);
+		OrdersDto createOrder = this.orderService.createOrder(request, principal.getName());
 
 		return new ResponseEntity<OrdersDto>(createOrder, HttpStatus.CREATED);
 	}
@@ -63,7 +65,7 @@ public class OrderController {
 	}
 	
 	
-	
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{orderId}")
 	public void deleteOrder(@PathVariable int orderId) {
 		
