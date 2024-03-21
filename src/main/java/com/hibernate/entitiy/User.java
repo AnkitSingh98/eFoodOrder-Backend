@@ -16,12 +16,15 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hibernate.payload.RoleDto;
 
 
 @Entity
@@ -48,6 +51,9 @@ public class User implements UserDetails{
 	
 	private String gender;
 	
+	private String imageName;
+	
+	
 	private String createAt;
 	
 	private String phone;
@@ -63,6 +69,34 @@ public class User implements UserDetails{
 	private Set<Role> roles = new HashSet<>();
 	
 	
+	
+	public User(int userId, String name, String email, String password, String address, String about, String gender,
+			String imageName, String createAt, String phone, boolean active, Cart cart, Set<Role> roles) {
+		super();
+		this.userId = userId;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.address = address;
+		this.about = about;
+		this.gender = gender;
+		this.imageName = imageName;
+		this.createAt = createAt;
+		this.phone = phone;
+		this.active = active;
+		this.cart = cart;
+		this.roles = roles;
+	}
+	
+	
+	public User(int userId, @NotEmpty String name, @Email(message = "Valid email address is required !!") String email, String password, Set<Role> roles) {
+		super();
+		this.userId = userId;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
+	}
 	
 	
 	
@@ -96,20 +130,17 @@ public class User implements UserDetails{
 
 	
 
-	public User(int userId, String name, String email, String password, String address, String about, String gender,
-			String createAt, String phone, boolean active) {
-		super();
-		this.userId = userId;
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.address = address;
-		this.about = about;
-		this.gender = gender;
-		this.createAt = createAt;
-		this.phone = phone;
-		this.active = active;
+	public String getImageName() {
+		return imageName;
 	}
+
+
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+
+
 
 	public User() {
 		super();

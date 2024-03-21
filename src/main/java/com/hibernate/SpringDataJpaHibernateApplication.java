@@ -1,6 +1,9 @@
 package com.hibernate;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +11,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.hibernate.entitiy.Product;
 import com.hibernate.entitiy.Role;
+import com.hibernate.entitiy.User;
+import com.hibernate.payload.RoleDto;
+import com.hibernate.payload.UserDto;
 import com.hibernate.repository.ProductRepository;
 import com.hibernate.repository.RoleRepository;
+import com.hibernate.repository.UserRepository;
+import com.hibernate.services.UserService;
+
 
 @SpringBootApplication
 public class SpringDataJpaHibernateApplication implements CommandLineRunner{
@@ -21,17 +31,22 @@ public class SpringDataJpaHibernateApplication implements CommandLineRunner{
 	@Autowired
 	private RoleRepository roleRepository;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	
 	public static void main(String[] args) {
 		
 		SpringApplication.run(SpringDataJpaHibernateApplication.class, args);
 	}
-	
-	@Bean
-	public  ModelMapper mapper() {
-		return new ModelMapper();
-	}
+
+    @Bean
+    ModelMapper mapper() {
+        return new ModelMapper();
+    }
 
 	
 	
@@ -52,7 +67,14 @@ public class SpringDataJpaHibernateApplication implements CommandLineRunner{
 		role3.setId(103);
 		role3.setName("ROLE_STAFF");
 		
-		roleRepository.saveAll(List.of(role1,role2,role3));
+		//roleRepository.saveAll(List.of(role1,role2,role3));
+		roleRepository.saveAll(Arrays.asList(role1,role2,role3));
+		
+		Set<Role> roles = new HashSet<>();
+		roles.add(role1);
+		roles.add(role2);
+		User user = new User(1, "Ankit", "ankit@gmail.com", this.passwordEncoder.encode("ankit"), roles);
+		userRepository.save(user);
 		
 		}catch(Exception e) {
 			System.out.println("Role already exists!!!");

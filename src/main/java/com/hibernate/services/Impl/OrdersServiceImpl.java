@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 import org.springframework.stereotype.Service;
 
 import com.hibernate.entitiy.Cart;
@@ -118,9 +119,18 @@ public class OrdersServiceImpl implements OrdersService {
 		
 		String orderStatus = orderDto.getOrderStatus();
 		String paymentStatus = orderDto.getPaymentStatus();
+		String name = orderDto.getUser().getName();
+		String phone = orderDto.getUser().getPhone();
+		
 		
 		myOrder.setOrderStatus(orderStatus);
 		myOrder.setPaymentStatus(paymentStatus);
+		
+		if(name!=null)
+		myOrder.getUser().setName(name);
+		
+		if(phone!=null)
+		myOrder.getUser().setPhone(phone);;
 		
 		Order updatedOrder = this.orderRepository.save(myOrder);
 		
@@ -152,6 +162,18 @@ public class OrdersServiceImpl implements OrdersService {
 		OrdersDto dto = this.mapper.map(order, OrdersDto.class);
 		
 		return dto;
+	}
+
+	@Override
+	public List<OrdersDto> getOrderOfUser(String username) {
+		
+		User user = this.userRepository.findByEmail(username).orElseThrow(()-> new ResourceNotFoundException());
+		
+		List<Order> ordersOfUser = this.orderRepository.findByUser(user).orElseThrow(()-> new ResourceNotFoundException());
+		
+		List<OrdersDto> orderDtos = ordersOfUser.stream().map(order -> this.mapper.map(order, OrdersDto.class)).collect(Collectors.toList());
+		
+		return orderDtos;
 	}
 
 }

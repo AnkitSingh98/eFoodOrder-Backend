@@ -10,8 +10,29 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.hibernate.utility.ApiResponse;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+	
+	
+	
+	// this method will automatically run whenever we get AnkitException
+	@ExceptionHandler(AnkitException.class)
+	public ResponseEntity<?> handleAnkitException(AnkitException ex) {
+		
+		ApiResponse response = new ApiResponse(ex.getMessage(),ex.getStatus(),ex.getThrownByClassName(), ex.getThrownByMethodName());
+		return new ResponseEntity<ApiResponse>(response, HttpStatus.NOT_FOUND);
+	}
+	
+	
+	@ExceptionHandler(BadApiRequest.class)
+	public ResponseEntity<String> handleBadApiRequest(BadApiRequest ex) {
+		
+		String response = ex.getMessage();
+		return new ResponseEntity<String>(response, HttpStatus.BAD_REQUEST);
+	}
+	
 	
 	// this method will automatically run whenever we get ResourceNotFoundException
 	@ExceptionHandler(ResourceNotFoundException.class)

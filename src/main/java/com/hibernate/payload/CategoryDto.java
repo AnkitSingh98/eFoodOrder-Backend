@@ -12,6 +12,8 @@ public class CategoryDto {
 	
 	public String title;
 	
+	public String description;
+	
 
 	public int getCategoryId() {
 		return categoryId;
@@ -27,6 +29,19 @@ public class CategoryDto {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@Override
+	public String toString() {
+		return "CategoryDto [categoryId=" + categoryId + ", title=" + title + ", description=" + description + "]";
 	}
 	
 	

@@ -28,6 +28,7 @@ public class CategoryServicecImpl implements CategoryService {
 		
 		Category createdCategory =  this.categoryRepository.save(c);
 		return this.toDto(createdCategory);
+		
 	}
 
 	@Override
@@ -35,6 +36,7 @@ public class CategoryServicecImpl implements CategoryService {
 		
 		Category c = this.categoryRepository.findById(cid).orElseThrow( ()-> new ResourceNotFoundException());
 		c.setTitle(t.getTitle());
+		c.setDescription(t.getDescription());
 		
 		Category updatedCategory = this.categoryRepository.save(c);
 		return this.toDto(updatedCategory);
@@ -71,7 +73,7 @@ public class CategoryServicecImpl implements CategoryService {
 		CategoryDto t = new CategoryDto();
 		t.setCategoryId(c.getCategoryId());
 		t.setTitle(c.getTitle());
-		
+		t.setDescription(c.getDescription());
 		return t;
 	}
 	
@@ -79,7 +81,7 @@ public class CategoryServicecImpl implements CategoryService {
 		Category c = new Category();
 		c.setCategoryId(t.getCategoryId());
 		c.setTitle(t.getTitle());
-		
+		c.setDescription(t.getDescription());
 		return c;
 	}
 

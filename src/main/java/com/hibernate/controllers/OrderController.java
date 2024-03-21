@@ -31,7 +31,7 @@ public class OrderController {
 	@Autowired
 	private OrdersService orderService;
 
-	@PostMapping("/")
+	@PostMapping("/create-order")
 	public ResponseEntity<OrdersDto> createOrder(@RequestBody OrderRequest request, Principal principal) {
 
 		OrdersDto createOrder = this.orderService.createOrder(request, principal.getName());
@@ -40,7 +40,7 @@ public class OrderController {
 	}
 	
 	
-	@GetMapping("/")
+	@GetMapping("")
 	public List<OrdersDto> getAll(){
 		
 		List<OrdersDto> dtos = this.orderService.getAll();
@@ -71,6 +71,14 @@ public class OrderController {
 		
 		this.orderService.deleteOrder(orderId);
 	}
+	
+	
+	
+	
+	  @GetMapping("/getOrder")
+	    public ResponseEntity<List<OrdersDto>> getOrders(Principal principal) {
+	        return new ResponseEntity<>(this.orderService.getOrderOfUser(principal.getName()), HttpStatus.OK);
+	    }
 	
 	
 	

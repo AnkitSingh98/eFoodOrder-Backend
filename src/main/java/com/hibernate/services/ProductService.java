@@ -16,9 +16,13 @@ import com.hibernate.repository.ProductRepository;
 
 public interface ProductService {
 	
-	public ProductDto createProduct(ProductDto t, int categoryId);
+	public ProductDto createProductWithCategory(ProductDto t, int categoryId);
 	
-	public ProductDto updateProduct(ProductDto t, int pid);
+	public ProductDto createProductWithoutCategory(ProductDto t);
+	
+	public ProductDto updateProduct(ProductDto t, int pid);  
+	
+	public ProductDto updateProductCategory(int pid, int cid); 
 	
 	public void deleteProduct(int pid);
 	

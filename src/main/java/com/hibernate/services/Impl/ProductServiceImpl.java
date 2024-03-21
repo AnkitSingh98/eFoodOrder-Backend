@@ -1,10 +1,16 @@
 package com.hibernate.services.Impl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.hibernate.entitiy.Category;
@@ -24,9 +30,12 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private CategoryRepository catRepo;
 	
+	@Value("${product.images.path}")
+	private String imagePath;
+	
 	// Create Product ********
 	@Override
-	public ProductDto createProduct(ProductDto t, int categoryId) {
+	public ProductDto createProductWithCategory(ProductDto t, int categoryId) {
 		
 		System.out.println("Inside ServiceImpl");
 		
@@ -34,13 +43,13 @@ public class ProductServiceImpl implements ProductService {
 		 System.out.println(cat);
 		 Product p = this.toEntity(t);
 		 
-		// System.out.println("Product = " + p);
+		 System.out.println("Product = " + p);
 		 p.setCategory(cat);
 		 
-		// System.out.println("Product after set category = " + p);
+		 System.out.println("Product after set category = " + p);
 		 
 		 Product createdProduct = this.productRepository.save(p);
-		// System.out.println(" Product saved in db = " + createdProduct);
+		 System.out.println(" Product saved in db = " + createdProduct);
 		 
 		// System.out.println("Inside ServiceImpl Product created");
 		 return this.toDto(createdProduct);
@@ -48,15 +57,27 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	
+	// Create Product without Category ********
+		@Override
+		public ProductDto createProductWithoutCategory(ProductDto t) {
+			
+			 Product p = this.toEntity(t);
+			 Product createdProduct = this.productRepository.save(p);
+			 return this.toDto(createdProduct);
+			 
+		}
+	
+	
 	
 	// Update  **********
 	@Override
 	public ProductDto updateProduct(ProductDto t, int pid) {
 		
-		Product p = this.productRepository.findById(pid).orElseThrow( ()-> new ResourceNotFoundException("User not found "+pid) );
+		Product p = this.productRepository.findById(pid).orElseThrow( ()-> new ResourceNotFoundException("Product not found "+pid) );
 		p.setProductName(t.getProductName());
 		p.setProductDesc(t.getProductDesc());
 		p.setProductPrice(t.getProductPrice());
+		p.setProductDiscountedPrice(t.getProductDiscountedPrice());
 		p.setProductQuantity(t.getProductQuantity());
 		p.setLive(t.isLive());
 		p.setImageName(t.getImageName());
@@ -68,6 +89,27 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	
+	//Update Product Category
+	@Override
+	public ProductDto updateProductCategory(int pid, int cid) {
+		
+		Category cat = this.catRepo.findById(cid).orElseThrow( ()-> new ResourceNotFoundException());
+		 System.out.println(cat);
+		 Product p =  this.productRepository.findById(pid).orElseThrow( ()-> new ResourceNotFoundException());
+		 
+		 System.out.println("Product = " + p);
+		 p.setCategory(cat);
+		 
+		 System.out.println("Product after set category = " + p);
+		 
+		 Product createdProduct = this.productRepository.save(p);
+		 System.out.println(" Product saved in db = " + createdProduct);
+		 
+		// System.out.println("Inside ServiceImpl Product created");
+		 return this.toDto(createdProduct);
+	}
+	
+	
 	
 	
 	// Delete by id ***********
@@ -75,6 +117,17 @@ public class ProductServiceImpl implements ProductService {
 	public void deleteProduct(int pid) {
 		
 		Product p = productRepository.findById(pid).orElseThrow( ()-> new ResourceNotFoundException());
+		String fullPath = imagePath + p.getImageName();
+		
+		try {
+			Path path = Paths.get(fullPath);
+			Files.delete(path);
+		}catch(NoSuchFileException e) {
+			e.printStackTrace();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		
 		productRepository.delete(p);
 	}
 	
@@ -134,6 +187,7 @@ public class ProductServiceImpl implements ProductService {
 		t.setProductName(p.getProductName());
 		t.setProductDesc(p.getProductDesc());
 		t.setProductPrice(p.getProductPrice());
+		t.setProductDiscountedPrice(p.getProductDiscountedPrice());
 		t.setProductQuantity(p.getProductQuantity());
 		t.setLive(p.isLive());
 		t.setImageName(p.getImageName());
@@ -151,6 +205,7 @@ public class ProductServiceImpl implements ProductService {
 		p.setProductName(t.getProductName());
 		p.setProductDesc(t.getProductDesc());
 		p.setProductPrice(t.getProductPrice());
+		p.setProductDiscountedPrice(t.getProductDiscountedPrice());
 		p.setProductQuantity(t.getProductQuantity());
 		p.setLive(t.isLive());
 		p.setImageName(t.getImageName());

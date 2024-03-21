@@ -14,7 +14,7 @@ public class CartDto {
 	
 	private int cartId;
 	
-	private User user;
+	private UserDto user;
 	
 	private Set<CartItemDto> items = new HashSet<>();
 
@@ -29,11 +29,13 @@ public class CartDto {
 		this.cartId = cartId;
 	}
 
-	public User getUser() {
+
+
+	public UserDto getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserDto user) {
 		this.user = user;
 	}
 

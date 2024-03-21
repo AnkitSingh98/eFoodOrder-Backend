@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StreamUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ import com.hibernate.entitiy.Product;
 import com.hibernate.payload.ProductDto;
 import com.hibernate.services.FileUploadService;
 import com.hibernate.services.ProductService;
+import com.hibernate.utility.ImageResponse;
 
 
 @RestController
@@ -53,20 +55,24 @@ public class ProductController {
 	    @PostMapping("/products/images/{productId}")
 	    public ResponseEntity<?> uploadImageOfProduct(
 	            @PathVariable int productId,
-	            @RequestParam("product_image") MultipartFile file
+	            @RequestParam("productImage") MultipartFile file
 	    ) {
 
 	        ProductDto product = this.productService.getProduct(productId);
 	        String imageName = null;
 	        try {
-	            imageName = this.fileUploadService.uploadFile(imagePath, file);
+	            imageName = this.fileUploadService.uploadFile( file, imagePath);
 	            product.setImageName(imageName);
-	            ProductDto productDto = this.productService.updateProduct(product, productId);
-	            return new ResponseEntity<>(productDto, HttpStatus.OK);
+	            
+	            productService.updateProduct(product, productId);
+	            
+	            ImageResponse imageResponse = new ImageResponse(imageName, "Image created successfully", true, HttpStatus.CREATED);
+	    		return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
 
 	        } catch (IOException e) {
-	            e.printStackTrace();
-	            return new ResponseEntity<>(Map.of("message", "File not uploaded on server !!"), HttpStatus.INTERNAL_SERVER_ERROR);
+	            e.printStackTrace(); 
+	           // return new ResponseEntity<>(Map.ofEntries("message", "File not uploaded on server !!"), HttpStatus.INTERNAL_SERVER_ERROR);
+	            return new ResponseEntity<>("File not uploaded on server !!", HttpStatus.INTERNAL_SERVER_ERROR);
 	        }
 
 
@@ -77,8 +83,8 @@ public class ProductController {
 	    public void downloadImage(@PathVariable int productId, HttpServletResponse response) throws IOException {
 	        ProductDto product = this.productService.getProduct(productId);
 	        String imageName = product.getImageName();
-	        String fullPath = imagePath + File.separator + imageName;
-	        InputStream resource = this.fileUploadService.getResource(fullPath);
+	        
+	        InputStream resource = this.fileUploadService.getResource(imagePath, imageName);
 	        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 	        OutputStream outputStream = response.getOutputStream();
 	        StreamUtils.copy(resource, outputStream);
@@ -87,16 +93,24 @@ public class ProductController {
 
 	
 	
+
+	 //create
+	 @PreAuthorize("hasRole('ADMIN')")
+	 @PostMapping("/product")
+	 public ResponseEntity<ProductDto> createProductWithoutCategory(@RequestBody ProductDto productDto) {
+	      ProductDto createdProduct = productService.createProductWithoutCategory(productDto);
+	      return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
+	  }
 	
 	
 	
 	//  Create Product Handler
 	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value="/category/{categoryId}/product",method=RequestMethod.POST)
-	public ProductDto createProduct(@RequestBody ProductDto t, @PathVariable int categoryId) {
+	public ProductDto createProductWithCategory(@RequestBody ProductDto t, @PathVariable int categoryId) {
 		
 		System.out.println("Inside controller");
-		return productService.createProduct(t, categoryId);
+		return productService.createProductWithCategory(t, categoryId);
 	}
 	
 	
@@ -107,6 +121,16 @@ public class ProductController {
 		
 		ProductDto updatedProduct = productService.updateProduct(t, pid);
 		
+		return updatedProduct;
+	}
+	
+	
+	// Update Product Category
+	@PreAuthorize("hasRole('ADMIN')")
+	@RequestMapping(value="/product/{pid}/category/{cid}",method= RequestMethod.PUT)
+	public ProductDto updateProductCategory( @PathVariable int pid, @PathVariable int cid) {
+		
+		ProductDto updatedProduct = productService.updateProductCategory(pid, cid);
 		return updatedProduct;
 	}
 	

@@ -1,19 +1,29 @@
 package com.hibernate.payload;
 
+import java.math.BigInteger;
 import java.util.HashSet;
+
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.hibernate.entitiy.Role;
 
+
+//@JsonInclude(Include.NON_NULL)
 public class UserDto {
 	
 	
@@ -29,8 +39,8 @@ public class UserDto {
 	@Email(message= "Valid email address is required !!")
 	private String email;
 	
-	@NotEmpty
-	@Size(min = 4, message = "Password must be of 4 digits!!")
+//	@NotEmpty
+//	@Size(min = 4, message = "Password must be of 4 digits!!")
 	private String password;
 	
 	private String address;
@@ -39,6 +49,8 @@ public class UserDto {
 	
 	private String gender;
 	
+	private String imageName;
+
 	private String createAt;
 	
 	private String phone;
@@ -48,6 +60,26 @@ public class UserDto {
 	private Set<RoleDto> roles = new HashSet<>();
 	
 	
+	
+	
+
+	public UserDto(int userId, @NotEmpty String name, @Email(message = "Valid email address is required !!") String email, String password, Set<RoleDto> roles) {
+		super();
+		this.userId = userId;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
+	}
+	
+	
+
+	public UserDto() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
 
 	public Set<RoleDto> getRoles() {
 		return roles;
@@ -138,6 +170,16 @@ public class UserDto {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+	
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+
+
 	
 	
 	

@@ -1,5 +1,7 @@
 package com.hibernate.services.Impl;
 
+import com.hibernate.exception.BadApiRequest;
+import com.hibernate.exception.ResourceNotFoundException;
 import com.hibernate.services.FileUploadService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,32 +17,61 @@ public class FileUploadServiceImpl implements FileUploadService{
 	
 	
 	@Override
-    public String uploadFile(String path, MultipartFile file) throws IOException {
+    public String uploadFile(MultipartFile file, String path) throws IOException {
 
         //get original name of file
 //        abc.png
 //        sdgsdfgsadfasdfg.png
         String originalFilename = file.getOriginalFilename();
-        //generate new name for product image
-        String randomNameId = UUID.randomUUID().toString();
-        String randomNameWithExtension = randomNameId.concat(originalFilename.substring(originalFilename.lastIndexOf(".")));
-        String fullPath = path + File.separator + randomNameWithExtension;
-        File folderFile = new File(path);
+        
+        //generate new random name for image
+        String filename = UUID.randomUUID().toString();
+        
+        //extract extension from original image name
+        String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+        
+        String filenameWithExtension = filename + extension;
+        
+        String fullPathWithFilename = path + filenameWithExtension;
+        
+        if(extension.equalsIgnoreCase(".png") || extension.equalsIgnoreCase(".jpg") || extension.equalsIgnoreCase(".jpeg")) {
+        	
+        	File folder = new File(path);
 
-        if (!folderFile.exists()) {
-            folderFile.mkdirs();
+            if (!folder.exists()) {
+            	
+            	folder.mkdirs();
+            }
+            
+            Files.copy(file.getInputStream(), Paths.get(fullPathWithFilename));
+            return filenameWithExtension;
+        	
+        }else {
+        	throw new BadApiRequest("File with this extension " + extension + " not allowed");
         }
-        Files.copy(file.getInputStream(), Paths.get(fullPath));
-        return randomNameWithExtension;
+        
     }
 
 	
 	
 	
     @Override
-    public InputStream getResource(String path) throws FileNotFoundException {
-        InputStream is=new FileInputStream(path);
-        return is;
+    public InputStream getResource(String path, String name) throws FileNotFoundException {
+    	
+    	String fullPath = path + name;
+        
+    	try {
+    		
+    		InputStream inputStream = new FileInputStream(fullPath);
+    		return inputStream;
+    		
+    	}catch(FileNotFoundException e) {
+    		
+    		throw new ResourceNotFoundException("Image not found for this user!!");
+    		
+    	}
+    	
+        
     }
 
     

@@ -1,6 +1,7 @@
 package com.hibernate.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,6 +16,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.hibernate.security.JwtAuthenticationEntryPoint;
 import com.hibernate.security.JwtAuthenticationFilter;
@@ -100,6 +104,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		return super.authenticationManagerBean();
 	}
 	
+	
+	 @Bean
+	    public FilterRegistrationBean corsFilter() {
+	        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	        CorsConfiguration configuration = new CorsConfiguration();
+	        configuration.setAllowCredentials(true);
+	        configuration.addAllowedOriginPattern("*");
+	        configuration.addAllowedHeader("Authorization");
+	        configuration.addAllowedHeader("Content-Type");
+	        configuration.addAllowedHeader("Accept");
+	        configuration.addAllowedMethod("POST");
+	        configuration.addAllowedMethod("GET");
+	        configuration.addAllowedMethod("DELETE");
+	        configuration.addAllowedMethod("PUT");
+	        configuration.addAllowedMethod("OPTIONS");
+	        configuration.setMaxAge(3600L);
+	        source.registerCorsConfiguration("/**", configuration);
+	        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+	        bean.setOrder(-110);
+	        return bean;
+	    }
 	
 	
 

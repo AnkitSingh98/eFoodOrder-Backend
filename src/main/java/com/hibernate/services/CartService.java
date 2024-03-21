@@ -23,6 +23,9 @@ public interface CartService {
 	// remove item from cart
 	
 	CartDto removeItem(String username, int itemId);
+	
+	
+	CartDto clearCart(String username);
 		
 	
 

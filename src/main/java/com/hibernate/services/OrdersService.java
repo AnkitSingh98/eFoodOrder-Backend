@@ -2,7 +2,7 @@ package com.hibernate.services;
 
 import java.util.List;
 
-import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
+
 
 import com.hibernate.payload.OrderRequest;
 import com.hibernate.payload.OrdersDto;
@@ -25,4 +25,7 @@ public interface OrdersService {
 
 	// get single order
 	OrdersDto get(int orderId);
+	
+	
+	List<OrdersDto> getOrderOfUser(String username);
 }

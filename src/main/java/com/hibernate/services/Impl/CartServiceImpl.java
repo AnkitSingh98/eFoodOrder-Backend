@@ -55,9 +55,11 @@ public class CartServiceImpl implements CartService{
 		// Get User from username
 		User u = this.userRepository.findByEmail(username).orElseThrow( ()-> new ResourceNotFoundException());
 		
+		System.out.println("Inside Service: User = " + u.getName());
 		
 		//get the product from db
 		Product p = this.productRepo.findById(productId).orElseThrow( ()-> new ResourceNotFoundException());
+		System.out.println("Inside Service: Product= " + p);
 		
 		if(!p.isStock()) {
 			throw new ResourceNotFoundException("Product is out of stock");
@@ -71,6 +73,7 @@ public class CartServiceImpl implements CartService{
 		cartItem.setQuantity(quantity);
 		cartItem.setTotalProductPrice();
 		
+		System.out.println("CartItem: "+cartItem.getCartItem()+" --> "+cartItem.getCartItemId()+ " ---> " + cartItem.getProduct().getProductName());
 		
 		// Get cart of user
 		Cart cart = u.getCart();
@@ -83,14 +86,15 @@ public class CartServiceImpl implements CartService{
 			cart.setUser(u);
 		}
 		
+		System.out.println("Cart of User = : "+cart.getCartId() + " ---> " + cart.getUser() + " ----> " + cart.getItems().size());
 		
 		Set<CartItem> items = cart.getItems();
 		
-		// Till now what is happening is if we add same product more than one time, it creates new cart item and adds it there
-		// So, to avoid this and add it in the same cart item BELOW CODE
-		// If cart item already present for that productId then just update the quantity
-		//else create new cart item
-				
+//		 Till now what is happening is if we add same product more than one time, it creates new cart item and adds it there
+//		 So, to avoid this and add it in the same cart item BELOW CODE
+//		 If cart item already present for that productId then just update the quantity
+//		else create new cart item
+//				
 		AtomicReference<Boolean> flag = new AtomicReference<>(false);
 
 		Set<CartItem> newItems = items.stream().map((i) -> {
@@ -125,12 +129,13 @@ public class CartServiceImpl implements CartService{
 				
 		
 		
-		//niche wala step we can skip also as we are using orphan = true in cart.java !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		cart.setItems(items);
+//		//niche wala step we can skip also as we are using orphan = true in cart.java !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//		//cart.setItems(items);
 		
-		
+	
 		Cart updatedCart = this.cartRepository.save(cart);
 		return this.mapper.map(updatedCart, CartDto.class);
+		
 		
 		
 	}
@@ -165,6 +170,26 @@ public class CartServiceImpl implements CartService{
 		boolean result = items.removeIf((item) -> item.getProduct().getProductId() == productId);
 		
 
+		Cart updatedCart = cartRepository.save(cart);
+		// No need to save items because we are using Cascade.ALL
+
+		return this.mapper.map(updatedCart, CartDto.class);
+	}
+	
+	
+	
+	@Override
+	public CartDto clearCart(String username) {
+		
+		User user = this.userRepository.findByEmail(username).orElseThrow( ()-> new ResourceNotFoundException());
+
+		Cart cart = user.getCart();
+
+		Set<CartItem> items = cart.getItems();
+
+		boolean result = items.removeAll(items);
+		
+		
 		Cart updatedCart = cartRepository.save(cart);
 		// No need to save items because we are using Cascade.ALL
 

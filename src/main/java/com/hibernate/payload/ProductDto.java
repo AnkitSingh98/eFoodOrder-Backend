@@ -1,5 +1,7 @@
 package com.hibernate.payload;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.hibernate.entitiy.Category;
@@ -7,10 +9,16 @@ import com.hibernate.entitiy.Category;
 public class ProductDto {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int productId;
+	
 	private String productName;
+	
 	private String productDesc;
+	
 	private double productPrice;
+	
+	private double productDiscountedPrice;
 	
 	private int productQuantity;
 	
@@ -73,6 +81,14 @@ public class ProductDto {
 	public void setProductPrice(double productPrice) {
 		this.productPrice = productPrice;
 	}
+	
+	public double getProductDiscountedPrice() {
+		return productDiscountedPrice;
+	}
+	public void setProductDiscountedPrice(double productDiscountedPrice) {
+		this.productDiscountedPrice = productDiscountedPrice;
+	}
+	
 	public boolean isStock() {
 		return stock;
 	}

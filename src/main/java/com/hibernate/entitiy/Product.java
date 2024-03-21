@@ -20,6 +20,8 @@ public class Product {
 	
 	private double productPrice;
 	
+	private double productDiscountedPrice;
+	
 	private int productQuantity;
 	
 	private boolean live;
@@ -35,13 +37,14 @@ public class Product {
 	
 	// --------------------------------------------
 
-	public Product(int productId, String productName, String productDesc, double productPrice, int productQuantity,
+	public Product(int productId, String productName, String productDesc, double productPrice, double productDiscountedPrice, int productQuantity,
 			boolean live, boolean stock, String imageName, Category category) {
 		super();
 		this.productId = productId;
 		this.productName = productName;
 		this.productDesc = productDesc;
 		this.productPrice = productPrice;
+		this.productDiscountedPrice = productDiscountedPrice;
 		this.productQuantity = productQuantity;
 		this.live = live;
 		this.stock = stock;
@@ -107,6 +110,17 @@ public class Product {
 
 	public void setProductPrice(double productPrice) {
 		this.productPrice = productPrice;
+	}
+	
+	
+	public double getProductDiscountedPrice() {
+		return productDiscountedPrice;
+	}
+
+
+
+	public void setProductDiscountedPrice(double productDiscountedPrice) {
+		this.productDiscountedPrice = productDiscountedPrice;
 	}
 
 

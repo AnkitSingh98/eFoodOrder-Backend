@@ -8,6 +8,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,8 @@ public class AuthController {
 	@Autowired
 	private JwtHelper helper;
 	
+	
+	
 	@Autowired
 	private ModelMapper mapper;
 	
@@ -38,11 +41,15 @@ public class AuthController {
 	
 	@PostMapping("/login")
 	public JwtResponse login( @RequestBody JwtRequest request) throws Exception {
-		
+		System.out.println("-------- Started ---------");
+		System.out.println(request);
+		System.out.println(request.getUsername());
+		System.out.println(request.getPassword());
 		
 		// authenticate
 		// if user is valid this method runs successfully and program continues  else it will throw exception
 		this.authenticateUser(request.getUsername(),request.getPassword());
+		System.out.println("-------- Line 49 ---------");
 		
 		// get UserDetails
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername(request.getUsername());
@@ -55,6 +62,13 @@ public class AuthController {
 		response.setToken(token);
 		response.setUser(this.mapper.map(userDetails, UserDto.class));
 		return response;
+	}
+	
+	
+	@PostMapping("test1")
+	public String test1( @RequestBody JwtRequest request ) {
+		
+		return "Ankitttt!!!!";
 	}
 	
 	

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,14 @@ public class CategoryController {
 	@PostMapping("/category")
 	public ResponseEntity<CategoryDto> createCategory( @RequestBody CategoryDto t) {
 		
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		System.out.println("Inside Category controller ");
 		 CategoryDto createdCatDto = this.categoryService.createCategory(t);
 		 return new ResponseEntity<CategoryDto>(createdCatDto,HttpStatus.CREATED);
 		

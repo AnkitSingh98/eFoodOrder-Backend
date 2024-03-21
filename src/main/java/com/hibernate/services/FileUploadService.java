@@ -10,10 +10,10 @@ public interface FileUploadService {
 	
 	
 	//create a file on server at given
-    String uploadFile(String path, MultipartFile file) throws IOException;
+    String uploadFile(MultipartFile file, String path) throws IOException;
 
     //get the resource
-    InputStream getResource(String path) throws FileNotFoundException;
+    InputStream getResource(String path, String name) throws FileNotFoundException;
 
     //delete file
     void deleteFile(String path);

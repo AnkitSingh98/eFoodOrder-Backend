@@ -3,6 +3,7 @@ package com.hibernate.controllers;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,8 +29,8 @@ public class CartController {
 	@PostMapping("/")
 	public CartDto addItemToCart(@RequestBody ItemRequest item, Principal principal) {
 		
-		System.out.println("Inside controller");
-		
+		System.out.println("Inside controller" + principal.getName());
+		System.out.println("Inside controller" + item.getProductId() + " "+ item.getQuantity());
 		
 		
 		CartDto t = this.cartService.addItem(item, principal.getName());
@@ -56,9 +57,16 @@ public class CartController {
 	
 	
 	
-	@PutMapping("/{productId}")
+	@PutMapping("/items/{productId}")
 	public CartDto removeProductFromcart(@PathVariable int productId, Principal principal) {
 		CartDto cartDto = this.cartService.removeItem(principal.getName(), productId);
+		return cartDto;
+	}
+	
+	
+	@DeleteMapping("/clearCart")
+	public CartDto clearCart(Principal principal) {
+		CartDto cartDto = this.cartService.clearCart(principal.getName());
 		return cartDto;
 	}
 
