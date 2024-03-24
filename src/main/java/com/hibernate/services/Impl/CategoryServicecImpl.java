@@ -37,6 +37,7 @@ public class CategoryServicecImpl implements CategoryService {
 		Category c = this.categoryRepository.findById(cid).orElseThrow( ()-> new ResourceNotFoundException());
 		c.setTitle(t.getTitle());
 		c.setDescription(t.getDescription());
+		c.setCoverImage(t.getCoverImage());
 		
 		Category updatedCategory = this.categoryRepository.save(c);
 		return this.toDto(updatedCategory);
@@ -74,6 +75,7 @@ public class CategoryServicecImpl implements CategoryService {
 		t.setCategoryId(c.getCategoryId());
 		t.setTitle(c.getTitle());
 		t.setDescription(c.getDescription());
+		t.setCoverImage(c.getCoverImage());
 		return t;
 	}
 	
@@ -82,6 +84,7 @@ public class CategoryServicecImpl implements CategoryService {
 		c.setCategoryId(t.getCategoryId());
 		c.setTitle(t.getTitle());
 		c.setDescription(t.getDescription());
+		c.setCoverImage(t.getCoverImage());
 		return c;
 	}
 

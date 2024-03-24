@@ -14,6 +14,16 @@ public class CategoryDto {
 	
 	public String description;
 	
+	public String coverImage;
+	
+
+	public String getCoverImage() {
+		return coverImage;
+	}
+
+	public void setCoverImage(String coverImage) {
+		this.coverImage = coverImage;
+	}
 
 	public int getCategoryId() {
 		return categoryId;
@@ -41,7 +51,8 @@ public class CategoryDto {
 
 	@Override
 	public String toString() {
-		return "CategoryDto [categoryId=" + categoryId + ", title=" + title + ", description=" + description + "]";
+		return "CategoryDto [categoryId=" + categoryId + ", title=" + title + ", description=" + description
+				+ ", coverImage=" + coverImage + "]";
 	}
 	
 	

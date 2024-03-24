@@ -23,6 +23,8 @@ public class Category {
 	
 	public String description;
 	
+	public String coverImage;
+	
 	@OneToMany(mappedBy = "category",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	private Set<Product> products = new HashSet<>();
 	
@@ -37,23 +39,45 @@ public class Category {
 //		this.products = products;
 //	}
 
-	@Override
-	public String toString() {
-		return "Category [categoryId=" + categoryId + ", title=" + title + ", description=" + description
-				+ ", products=" + products + "]";
-	}
+
 
 	public Category() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Category(int categoryId, String title, String description) {
-		super();
-		this.categoryId = categoryId;
-		this.title = title;
-		this.description=description;
+	
+
+	@Override
+	public String toString() {
+		return "Category [categoryId=" + categoryId + ", title=" + title + ", description=" + description
+				+ ", coverImage=" + coverImage + ", products=" + products + "]";
 	}
+
+
+
+	public String getCoverImage() {
+		return coverImage;
+	}
+
+
+
+	public void setCoverImage(String coverImage) {
+		this.coverImage = coverImage;
+	}
+
+
+
+	public Category(int categoryId, String title, String description, String coverImage, Set<Product> products) {
+	super();
+	this.categoryId = categoryId;
+	this.title = title;
+	this.description = description;
+	this.coverImage = coverImage;
+	this.products = products;
+}
+
+
 
 	public int getCategoryId() {
 		return categoryId;
