@@ -33,6 +33,12 @@ public class Order {
 	private String billingAddress;
 	
 	private Date orderDelivered;
+	
+	//Below 2 fields are newly added
+	
+	private String razorpayOrderId;
+	
+	private String paymentId;
 
 	@OneToOne
 	private User user;
@@ -45,10 +51,16 @@ public class Order {
 	
 	// -----------------------------------------------------------
 	
-	
+
+	public Order() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	
 	public Order(Integer orderId, String orderStatus, String paymentStatus, Date orderCreated, double orderAmount,
-			String billingAddress, Date orderDelivered, User user, Set<OrderItem> items) {
+			String billingAddress, Date orderDelivered, String razorpayOrderId, String paymentId, User user,
+			Set<OrderItem> items) {
 		super();
 		this.orderId = orderId;
 		this.orderStatus = orderStatus;
@@ -57,13 +69,26 @@ public class Order {
 		this.orderAmount = orderAmount;
 		this.billingAddress = billingAddress;
 		this.orderDelivered = orderDelivered;
+		this.razorpayOrderId = razorpayOrderId;
+		this.paymentId = paymentId;
 		this.user = user;
 		this.items = items;
 	}
 
-	public Order() {
-		super();
-		// TODO Auto-generated constructor stub
+	public String getRazorpayOrderId() {
+		return razorpayOrderId;
+	}
+
+	public void setRazorpayOrderId(String razorpayOrderId) {
+		this.razorpayOrderId = razorpayOrderId;
+	}
+
+	public String getPaymentId() {
+		return paymentId;
+	}
+
+	public void setPaymentId(String paymentId) {
+		this.paymentId = paymentId;
 	}
 
 	public Integer getOrderId() {
@@ -138,19 +163,7 @@ public class Order {
 		this.items = items;
 	}
 
-
 	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-
 	
 
 

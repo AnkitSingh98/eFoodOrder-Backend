@@ -33,7 +33,7 @@ public class OrderController {
 
 	@PostMapping("/create-order")
 	public ResponseEntity<OrdersDto> createOrder(@RequestBody OrderRequest request, Principal principal) {
-
+		
 		OrdersDto createOrder = this.orderService.createOrder(request, principal.getName());
 
 		return new ResponseEntity<OrdersDto>(createOrder, HttpStatus.CREATED);
@@ -63,6 +63,19 @@ public class OrderController {
 		OrdersDto updatedDto = this.orderService.updateOrder(dto, orderId);
 		return updatedDto;
 	}
+	
+	
+	
+	// update order payment status and payment id
+	
+	@PutMapping("/payment/{orderId}/{paymentId}")
+	public OrdersDto updateOrderPayment(@PathVariable int orderId, @PathVariable String paymentId) {
+		
+		OrdersDto updatedDto = this.orderService.updateOrderPayment(orderId, paymentId);
+		return updatedDto;
+		
+	}
+	
 	
 	
 	@PreAuthorize("hasRole('ADMIN')")

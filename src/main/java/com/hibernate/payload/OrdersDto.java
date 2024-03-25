@@ -27,12 +27,34 @@ public class OrdersDto {
 	
 	private Date orderDelivered;
 	
+	//Below 2 fields are newly added
+	
+	private String razorpayOrderId;
+		
+	private String paymentId;
+	
 	private UserDto user;
 	
 	private Set<OrderItemDto> items=new HashSet<>();
 	
 	
 	
+
+	public String getRazorpayOrderId() {
+		return razorpayOrderId;
+	}
+
+	public void setRazorpayOrderId(String razorpayOrderId) {
+		this.razorpayOrderId = razorpayOrderId;
+	}
+
+	public String getPaymentId() {
+		return paymentId;
+	}
+
+	public void setPaymentId(String paymentId) {
+		this.paymentId = paymentId;
+	}
 
 	public Integer getOrderId() {
 		return orderId;

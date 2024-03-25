@@ -28,4 +28,7 @@ public interface OrdersService {
 	
 	
 	List<OrdersDto> getOrderOfUser(String username);
+
+	// update order payment status and payment id
+	OrdersDto updateOrderPayment(int orderId, String paymentId);
 }

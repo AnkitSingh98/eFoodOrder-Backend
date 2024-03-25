@@ -53,7 +53,8 @@ public class OrdersServiceImpl implements OrdersService {
 		User user = this.userRepository.findByEmail(username).orElseThrow( ()-> new ResourceNotFoundException());
 		int cartId = request.getCartId();
 		String address = request.getAddress();
-
+		String rzpOrderId = request.getRazorpayOrderId();
+		
 		Cart cart = this.cartRepository.findById(cartId).orElseThrow(()-> new ResourceNotFoundException());
 
 		Set<CartItem> items = cart.getItems();
@@ -91,6 +92,7 @@ public class OrdersServiceImpl implements OrdersService {
 
 		order.setItems(orderItems);
 		order.setBillingAddress(address);
+		order.setRazorpayOrderId(rzpOrderId);
 		order.setPaymentStatus("NOT PAID");
 		order.setOrderAmount(totalOrderPrice.get());
 		order.setOrderCreated(new Date());
@@ -174,6 +176,23 @@ public class OrdersServiceImpl implements OrdersService {
 		List<OrdersDto> orderDtos = ordersOfUser.stream().map(order -> this.mapper.map(order, OrdersDto.class)).collect(Collectors.toList());
 		
 		return orderDtos;
+	}
+	
+
+	@Override
+	public OrdersDto updateOrderPayment(int orderId, String paymentId) {
+		
+		
+		Order myOrder = this.orderRepository.findById(orderId).orElseThrow(()-> new ResourceNotFoundException());
+		
+		myOrder.setPaymentId(paymentId);
+		myOrder.setPaymentStatus("PAID");
+		
+		Order updatedOrder = this.orderRepository.save(myOrder);
+		
+		return this.mapper.map(updatedOrder, OrdersDto.class);
+		
+		
 	}
 
 }
